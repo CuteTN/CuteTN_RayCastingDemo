@@ -46,7 +46,19 @@ namespace RayCastingDemo
 
         Color BackgroundColor = Color.Black;
 
-        int ReflectionLimit = 10;
+        int reflectionLimit = 10;
+        int ReflectionLimit
+        {
+            get { return reflectionLimit; }
+            set
+            {
+                if( reflectionLimit == value )
+                    return;
+
+                reflectionLimit = value;
+                SpotLight.ReflectingEnergy = value;
+            }
+        }
 
 
         public FormMain()
@@ -232,6 +244,7 @@ namespace RayCastingDemo
             form.NumberOfRay = this.NumberOfRays;
             form.RayBrightness = this.ParticleRaysPen.Color.A;
             form.RayThickness = (int)this.particleRaysPen.Width;
+            form.ReflectionLimit = this.ReflectionLimit;
             form.RayColor = Color.FromArgb(255, this.particleRaysPen.Color);
 
             form.BackgroundColor = this.BackColor;
@@ -241,6 +254,7 @@ namespace RayCastingDemo
         {
             this.NumberOfRays = form.NumberOfRay;
             this.ParticleRaysPen = new Pen( Color.FromArgb(form.RayBrightness, form.RayColor), form.RayThickness );
+            this.ReflectionLimit = form.ReflectionLimit;
 
             this.BackColor = form.BackgroundColor;
         }

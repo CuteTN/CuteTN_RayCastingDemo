@@ -68,6 +68,12 @@ namespace RayCastingDemo
             set { numericUpDown_RayThickness.Value = value; }
         }
 
+        public int ReflectionLimit
+        {
+            get { return (int)numericUpDown_ReflectionLimit.Value; }
+            set { numericUpDown_ReflectionLimit.Value = value; }
+        }
+
         public Color RayColor
         {
             get { return button_RayColor.BackColor; }

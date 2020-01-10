@@ -11,7 +11,6 @@ namespace RayCastingDemo
     {
         List<Ray> Rays = new List<Ray>();
         public bool Enabled = true;
-        public int ReflectingEnergy;
         
         PointF Pos;
 
@@ -42,6 +41,23 @@ namespace RayCastingDemo
                 for(int i=0; i<value; i++)
                 {
                     Rays.Add( new Ray(Pos, i*Math.PI*2/value, RaysPen, ReflectingEnergy) );
+                }
+            }
+        }
+
+        private int reflectingEnergy;
+        public int ReflectingEnergy
+        {
+            get { return reflectingEnergy; }
+            set
+            {
+                if( reflectingEnergy == value )
+                    return;
+
+                reflectingEnergy = value;
+                foreach (var ray in Rays)
+                {
+                    ray.ReflectingEnergy = value;
                 }
             }
         }

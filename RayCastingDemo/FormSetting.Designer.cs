@@ -40,16 +40,19 @@
             this.label_BackgroundColor = new System.Windows.Forms.Label();
             this.buttonOK = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.numericUpDown_ReflectionLimit = new System.Windows.Forms.NumericUpDown();
+            this.label_ReflectionLimit = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NumberOfRays)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_RayBrightness)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_RayThickness)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_ReflectionLimit)).BeginInit();
             this.SuspendLayout();
             // 
             // label_NumberOfRays
             // 
             this.label_NumberOfRays.AutoSize = true;
             this.label_NumberOfRays.Font = new System.Drawing.Font("Bookman Old Style", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_NumberOfRays.Location = new System.Drawing.Point(33, 140);
+            this.label_NumberOfRays.Location = new System.Drawing.Point(33, 60);
             this.label_NumberOfRays.Name = "label_NumberOfRays";
             this.label_NumberOfRays.Size = new System.Drawing.Size(160, 23);
             this.label_NumberOfRays.TabIndex = 0;
@@ -58,7 +61,7 @@
             // numericUpDown_NumberOfRays
             // 
             this.numericUpDown_NumberOfRays.Font = new System.Drawing.Font("Bookman Old Style", 12F);
-            this.numericUpDown_NumberOfRays.Location = new System.Drawing.Point(235, 140);
+            this.numericUpDown_NumberOfRays.Location = new System.Drawing.Point(235, 60);
             this.numericUpDown_NumberOfRays.Maximum = new decimal(new int[] {
             5000,
             0,
@@ -81,7 +84,7 @@
             // numericUpDown_RayBrightness
             // 
             this.numericUpDown_RayBrightness.Font = new System.Drawing.Font("Bookman Old Style", 12F);
-            this.numericUpDown_RayBrightness.Location = new System.Drawing.Point(235, 200);
+            this.numericUpDown_RayBrightness.Location = new System.Drawing.Point(235, 120);
             this.numericUpDown_RayBrightness.Maximum = new decimal(new int[] {
             255,
             0,
@@ -95,7 +98,7 @@
             // 
             this.label_RayBrightness.AutoSize = true;
             this.label_RayBrightness.Font = new System.Drawing.Font("Bookman Old Style", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_RayBrightness.Location = new System.Drawing.Point(33, 200);
+            this.label_RayBrightness.Location = new System.Drawing.Point(33, 120);
             this.label_RayBrightness.Name = "label_RayBrightness";
             this.label_RayBrightness.Size = new System.Drawing.Size(156, 23);
             this.label_RayBrightness.TabIndex = 2;
@@ -104,7 +107,7 @@
             // numericUpDown_RayThickness
             // 
             this.numericUpDown_RayThickness.Font = new System.Drawing.Font("Bookman Old Style", 12F);
-            this.numericUpDown_RayThickness.Location = new System.Drawing.Point(235, 260);
+            this.numericUpDown_RayThickness.Location = new System.Drawing.Point(235, 180);
             this.numericUpDown_RayThickness.Maximum = new decimal(new int[] {
             500,
             0,
@@ -118,7 +121,7 @@
             // 
             this.label_RayThickness.AutoSize = true;
             this.label_RayThickness.Font = new System.Drawing.Font("Bookman Old Style", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_RayThickness.Location = new System.Drawing.Point(33, 260);
+            this.label_RayThickness.Location = new System.Drawing.Point(33, 180);
             this.label_RayThickness.Name = "label_RayThickness";
             this.label_RayThickness.Size = new System.Drawing.Size(146, 23);
             this.label_RayThickness.TabIndex = 4;
@@ -128,7 +131,7 @@
             // 
             this.label_RayColor.AutoSize = true;
             this.label_RayColor.Font = new System.Drawing.Font("Bookman Old Style", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label_RayColor.Location = new System.Drawing.Point(33, 320);
+            this.label_RayColor.Location = new System.Drawing.Point(33, 340);
             this.label_RayColor.Name = "label_RayColor";
             this.label_RayColor.Size = new System.Drawing.Size(100, 23);
             this.label_RayColor.TabIndex = 6;
@@ -137,7 +140,7 @@
             // button_RayColor
             // 
             this.button_RayColor.Font = new System.Drawing.Font("Bookman Old Style", 12F);
-            this.button_RayColor.Location = new System.Drawing.Point(235, 320);
+            this.button_RayColor.Location = new System.Drawing.Point(235, 340);
             this.button_RayColor.Name = "button_RayColor";
             this.button_RayColor.Size = new System.Drawing.Size(249, 31);
             this.button_RayColor.TabIndex = 7;
@@ -190,11 +193,36 @@
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
+            // numericUpDown_ReflectionLimit
+            // 
+            this.numericUpDown_ReflectionLimit.Font = new System.Drawing.Font("Bookman Old Style", 12F);
+            this.numericUpDown_ReflectionLimit.Location = new System.Drawing.Point(235, 240);
+            this.numericUpDown_ReflectionLimit.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            this.numericUpDown_ReflectionLimit.Name = "numericUpDown_ReflectionLimit";
+            this.numericUpDown_ReflectionLimit.Size = new System.Drawing.Size(249, 31);
+            this.numericUpDown_ReflectionLimit.TabIndex = 13;
+            // 
+            // label_ReflectionLimit
+            // 
+            this.label_ReflectionLimit.AutoSize = true;
+            this.label_ReflectionLimit.Font = new System.Drawing.Font("Bookman Old Style", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_ReflectionLimit.Location = new System.Drawing.Point(33, 240);
+            this.label_ReflectionLimit.Name = "label_ReflectionLimit";
+            this.label_ReflectionLimit.Size = new System.Drawing.Size(156, 23);
+            this.label_ReflectionLimit.TabIndex = 12;
+            this.label_ReflectionLimit.Text = "Reflection limit";
+            // 
             // FormSetting
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(496, 562);
+            this.Controls.Add(this.numericUpDown_ReflectionLimit);
+            this.Controls.Add(this.label_ReflectionLimit);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOK);
             this.Controls.Add(this.button_BackgroundColor);
@@ -215,6 +243,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_NumberOfRays)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_RayBrightness)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_RayThickness)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown_ReflectionLimit)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -234,5 +263,7 @@
         private System.Windows.Forms.Label label_BackgroundColor;
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.NumericUpDown numericUpDown_ReflectionLimit;
+        private System.Windows.Forms.Label label_ReflectionLimit;
     }
 }
