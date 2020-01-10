@@ -11,8 +11,9 @@ namespace RayCastingDemo
     {
         List<Ray> Rays = new List<Ray>();
         public bool Enabled = true;
+        public int ReflectingEnergy;
         
-        Point Pos;
+        PointF Pos;
 
         Pen raysPen;
         public Pen RaysPen
@@ -23,6 +24,7 @@ namespace RayCastingDemo
                 if( raysPen == value )
                     return;
 
+                raysPen = value;
                 foreach (var ray in Rays)
                 {
                     ray.RayPen = value;
@@ -39,23 +41,25 @@ namespace RayCastingDemo
                 
                 for(int i=0; i<value; i++)
                 {
-                    Rays.Add( new Ray(Pos, i*Math.PI*2/value, RaysPen) );
+                    Rays.Add( new Ray(Pos, i*Math.PI*2/value, RaysPen, ReflectingEnergy) );
                 }
             }
         }
 
-        public Particle(Point Pos, Pen RaysPen, int NumberOfRays)
+        public Particle(PointF Pos, Pen RaysPen, int NumberOfRays, int ReflectingEnergy)
         {
             this.RaysPen = RaysPen;
             this.Pos = Pos;
 
-            for(int i=0; i<NumberOfRays; i++)
-            {
-                Rays.Add( new Ray(Pos, i*Math.PI*2/NumberOfRays, RaysPen) );
-            }
+            this.ReflectingEnergy = ReflectingEnergy;
+            this.NumberOfRays = NumberOfRays;
+            // for(int i=0; i<NumberOfRays; i++)
+            // {
+            //     Rays.Add( new Ray(Pos, i*Math.PI*2/NumberOfRays, RaysPen, ReflectingEnergy) );
+            // }
         }
 
-        public void Update(Point NewPos, List<Obstacle> Obstacles)
+        public void Update(PointF NewPos, List<Obstacle> Obstacles)
         {
             foreach(var ray in Rays)
             {

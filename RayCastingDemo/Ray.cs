@@ -9,40 +9,50 @@ namespace RayCastingDemo
 {
     class Ray
     {
-        public Point Source;
+        public PointF Source;
         public double Angle; // radian
-        public Point CastPoint;
+        public PointF CastPoint;
         public Pen RayPen;
+        public int ReflectingEnergy;
+        
+        public Ray ReflectedRay = null;
 
-        public Ray(Point Source, double Angle, Pen RayPen)
+        public Ray(PointF Source, double Angle, Pen RayPen, int ReflectingEnergy)
         {
             this.Source = Source;
             this.Angle = Angle;
             this.RayPen = RayPen;
+            this.ReflectingEnergy = ReflectingEnergy;
         }
 
-        public Point InfPoint()
+        public PointF InfPoint()
         {
-            Point result = new Point();
-            result.X = (int)( Source.X + Utility.oo*Math.Cos(Angle) );
-            result.Y = (int)( Source.Y + Utility.oo*Math.Sin(Angle) );
+            PointF result = new PointF();
+            result.X = (float)( Source.X + Utility.oo*Math.Cos(Angle) );
+            result.Y = (float)( Source.Y + Utility.oo*Math.Sin(Angle) );
             return result;
         }
 
-        public void Update(Point NewPos, List<Obstacle> Obstacles)
+        public void Update(PointF NewPos, List<Obstacle> Obstacles)
         {
             Source = NewPos;
 
             CastPoint = InfPoint();
             double best = Utility.oo;
+            ReflectedRay = null;
 
             foreach(var obs in Obstacles)
             {
-                Point CastTemp = obs.Cast(this);
+                PointF CastTemp = obs.Cast(this);
                 double DisTemp = Utility.Distance(CastTemp, Source);
                 if( DisTemp < best )
                 {
                     CastPoint = CastTemp;
+                    ReflectedRay = obs.ReflectedRay(this);
+                    if( ReflectedRay != null )
+                    {
+                        ReflectedRay?.Update(ReflectedRay.Source, Obstacles);
+                    }
                     best = DisTemp;
                 }
             }
@@ -51,6 +61,7 @@ namespace RayCastingDemo
         public void Show(Graphics g_)
         {
             g_.DrawLine(RayPen, Source, CastPoint);
+            ReflectedRay?.Show(g_);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace RayCastingDemo
     static class Program
     {
         /// <summary>
-        /// The main entry point for the application.
+        /// The main entry PointF for the application.
         /// </summary>
         [STAThread]
         static void Main()

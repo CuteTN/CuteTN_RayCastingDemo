@@ -17,8 +17,11 @@ namespace RayCastingDemo
 
     abstract class Obstacle
     {
+        public bool Reflective = false;
+
         abstract public void Show(Graphics g_, Pen LinePen_);
-        abstract public Point Cast(Ray Ray_);
-        abstract public bool Touched(Point Pos_);
+        abstract public PointF Cast(Ray Ray_);
+        abstract public bool Touched(PointF Pos_);
+        abstract public Ray ReflectedRay(Ray Ray_);
     }
 }

@@ -10,32 +10,35 @@ namespace RayCastingDemo
     class Obstacle_Rectangle: Obstacle
     {
         Obstacle_Wall[] Sides = new Obstacle_Wall[4];
-        Rectangle DrawingRectangle;
+        RectangleF DrawingRectangle;
 
 
-        public Obstacle_Rectangle(Point Corner1_, Point Corner2_)
+        public Obstacle_Rectangle(PointF Corner1_, PointF Corner2_, bool Reflective)
         {
-            Point A = Corner1_;
-            Point B = new Point(Corner1_.X, Corner2_.Y);
-            Point C = Corner2_;
-            Point D = new Point(Corner2_.X, Corner1_.Y);
+            this.Reflective = Reflective;
 
-            Sides[0] = new Obstacle_Wall(A, B);
-            Sides[1] = new Obstacle_Wall(B, C);
-            Sides[2] = new Obstacle_Wall(C, D);
-            Sides[3] = new Obstacle_Wall(D, A);
+            PointF A = Corner1_;
+            PointF B = new PointF(Corner1_.X, Corner2_.Y);
+            PointF C = Corner2_;
+            PointF D = new PointF(Corner2_.X, Corner1_.Y);
+
+            Sides[0] = new Obstacle_Wall(A, B, Reflective);
+            Sides[1] = new Obstacle_Wall(B, C, Reflective);
+            Sides[2] = new Obstacle_Wall(C, D, Reflective);
+            Sides[3] = new Obstacle_Wall(D, A, Reflective);
 
             DrawingRectangle = new Rectangle();
-            DrawingRectangle.Location = new Point( Math.Min(A.X, C.X), Math.Min(A.Y, C.Y) );
-            DrawingRectangle.Size = new Size( Math.Abs(A.X - C.X), Math.Abs(A.Y - C.Y) );
+            DrawingRectangle.Location = new PointF( Math.Min(A.X, C.X), Math.Min(A.Y, C.Y) );
+            DrawingRectangle.Size = new SizeF( Math.Abs(A.X - C.X), Math.Abs(A.Y - C.Y) );
         }
 
         public override void Show(Graphics g_, Pen LinePen_)
         {
-            g_.DrawRectangle(LinePen_, DrawingRectangle);
+            Rectangle rect = new Rectangle( (int)DrawingRectangle.Location.X, (int)DrawingRectangle.Location.Y, (int)DrawingRectangle.Size.Width, (int)DrawingRectangle.Size.Height);
+            g_.DrawRectangle(LinePen_, rect);
         }
 
-        public override bool Touched(Point Pos_)
+        public override bool Touched(PointF Pos_)
         {
             foreach(var Side in Sides)
             {
@@ -46,14 +49,14 @@ namespace RayCastingDemo
             return false;
         }
 
-        public override Point Cast(Ray Ray_)
+        public override PointF Cast(Ray Ray_)
         {
-            Point CastPoint = Ray_.InfPoint();
+            PointF CastPoint = Ray_.InfPoint();
             double best = Utility.oo;
             
             foreach(var Side in Sides)
             {
-                Point CastTemp = Side.Cast(Ray_);
+                PointF CastTemp = Side.Cast(Ray_);
                 double DisTemp = Utility.Distance(CastTemp, Ray_.Source);
                 if( DisTemp < best )
                 {
@@ -64,5 +67,28 @@ namespace RayCastingDemo
 
             return CastPoint;
         }
+
+        public override Ray ReflectedRay(Ray Ray_)
+        {
+            if(! Reflective )
+                return null;
+            if( Ray_.ReflectingEnergy == 0 )
+                return null;
+
+            PointF Source = this.Cast(Ray_);
+            if( Source == Ray_.InfPoint() )
+                return null;
+
+            foreach(var Side in Sides)
+            {
+                PointF CastPoint = Side.Cast(Ray_);
+                if( Source == CastPoint )
+                    return Side.ReflectedRay(Ray_);
+            }
+
+            // code never reaches here!
+            return null;
+        }
+    
     }
 }

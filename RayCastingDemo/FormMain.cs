@@ -14,6 +14,7 @@ namespace RayCastingDemo
     {
         List<Obstacle> Obstacles = new List<Obstacle>();
         Particle SpotLight;
+        
 
         int numberOfRays = 500;
         public int NumberOfRays
@@ -44,6 +45,8 @@ namespace RayCastingDemo
         }
 
         Color BackgroundColor = Color.Black;
+
+        int ReflectionLimit = 10;
 
 
         public FormMain()
@@ -81,7 +84,7 @@ namespace RayCastingDemo
 
         private void CustomInitialize()
         {
-            SpotLight = new Particle(new Point(0,0), ParticleRaysPen, NumberOfRays);
+            SpotLight = new Particle(new PointF(0,0), ParticleRaysPen, NumberOfRays, ReflectionLimit);
             this.DoubleBuffered = true;
             InitializeEvents();
         }
@@ -138,6 +141,11 @@ namespace RayCastingDemo
                     this.Refresh();
                     break;
                 }
+                case Keys.M:
+                {
+                    IsBuildingMirrors = ! IsBuildingMirrors;
+                    break;
+                }
                 default:
                 {
                     break;
@@ -155,7 +163,11 @@ namespace RayCastingDemo
         {
             foreach(var obstacle in Obstacles)
             {
-                Pen LinePen = new Pen( Color.Chocolate, 5 );
+                Pen LinePen;
+                if(obstacle.Reflective)
+                    LinePen = new Pen( Color.Turquoise, 5);
+                else
+                    LinePen = new Pen( Color.Chocolate, 5 );
                 obstacle.Show(e.Graphics, LinePen);
             }
         }
@@ -247,8 +259,8 @@ namespace RayCastingDemo
 
         // BUILD HANDLE //////////////////////////////////////////////////////////////////////////////////////////////////   
         bool LeftMouseIsHolding = false;
-        Point LeftMouseDownPos;
-        Point MousePos;
+        PointF LeftMouseDownPos;
+        PointF MousePos;
         
         ObstacleType buildType = ObstacleType.Wall;
         ObstacleType BuildType
@@ -258,11 +270,14 @@ namespace RayCastingDemo
             {
                 buildType = value;
 
+                this.Refresh();
                 Font font = new Font("Arial", 12);
                 Brush brush = new SolidBrush( Utility.IsDark(this.BackColor)? Color.White:Color.Black );
-                this.CreateGraphics().DrawString("Building type has been changed to: " + buildType.ToString(), font, brush, new Point(0,0) );
+                this.CreateGraphics().DrawString("Building type has been changed to: " + buildType.ToString(), font, brush, new PointF(0,0) );
             }
         }
+
+        bool IsBuildingMirrors = false;
 
         private void FormMain_MouseDown_Build(object sender, MouseEventArgs e)
         {
@@ -295,7 +310,7 @@ namespace RayCastingDemo
                 return;
 
             LeftMouseIsHolding = false;
-            Obstacle NewObstacle = new Obstacle_Wall(LeftMouseDownPos, MousePos);
+            Obstacle NewObstacle = new Obstacle_Wall(LeftMouseDownPos, MousePos, IsBuildingMirrors);
             Obstacles.Add(NewObstacle);
         }
 
@@ -308,7 +323,7 @@ namespace RayCastingDemo
 
             Graphics g = e.Graphics;
             Pen p = new Pen(Color.LightPink, 5f);
-            Obstacle o = new Obstacle_Wall(LeftMouseDownPos, MousePos);
+            Obstacle o = new Obstacle_Wall(LeftMouseDownPos, MousePos, IsBuildingMirrors);
             o.Show(g,p);
         }
 
@@ -322,7 +337,7 @@ namespace RayCastingDemo
                 return;
 
             LeftMouseIsHolding = false;
-            Obstacle NewObstacle = new Obstacle_Circle( LeftMouseDownPos, Utility.Distance(LeftMouseDownPos, MousePos) );
+            Obstacle NewObstacle = new Obstacle_Circle( LeftMouseDownPos, Utility.Distance(LeftMouseDownPos, MousePos), IsBuildingMirrors );
             Obstacles.Add(NewObstacle);
         }
 
@@ -335,12 +350,12 @@ namespace RayCastingDemo
 
             Graphics g = e.Graphics;
             Pen p = new Pen(Color.LightPink, 5f);
-            Obstacle o = new Obstacle_Circle( LeftMouseDownPos, Utility.Distance(LeftMouseDownPos, MousePos) );
+            Obstacle o = new Obstacle_Circle( LeftMouseDownPos, Utility.Distance(LeftMouseDownPos, MousePos), IsBuildingMirrors );
             o.Show(g,p);
         }
 
         // CUSTOM HANDLE //////////////////////////////////////////////////////////////////////////////////////////////////   
-        List<Point> MouseTraces = new List<Point>();
+        List<PointF> MouseTraces = new List<PointF>();
 
         private void FormMain_MouseUp_BuildCustom(object sender, MouseEventArgs e)
         {
@@ -350,7 +365,7 @@ namespace RayCastingDemo
                 return;
 
             LeftMouseIsHolding = false;
-            Obstacle NewObstacle = new Obstacle_Custom( MouseTraces );
+            Obstacle NewObstacle = new Obstacle_Custom( MouseTraces, IsBuildingMirrors );
             Obstacles.Add(NewObstacle);
 
             MouseTraces.Clear();
@@ -365,7 +380,7 @@ namespace RayCastingDemo
 
             Graphics g = e.Graphics;
             Pen p = new Pen(Color.LightPink, 5f);
-            Obstacle o = new Obstacle_Custom( MouseTraces );
+            Obstacle o = new Obstacle_Custom( MouseTraces, IsBuildingMirrors );
             o.Show(g,p);
         }
 
@@ -379,7 +394,7 @@ namespace RayCastingDemo
                 return;
 
             LeftMouseIsHolding = false;
-            Obstacle NewObstacle = new Obstacle_Rectangle(LeftMouseDownPos, MousePos);
+            Obstacle NewObstacle = new Obstacle_Rectangle(LeftMouseDownPos, MousePos, IsBuildingMirrors);
             Obstacles.Add(NewObstacle);
         }
 
@@ -392,7 +407,7 @@ namespace RayCastingDemo
 
             Graphics g = e.Graphics;
             Pen p = new Pen(Color.LightPink, 5f);
-            Obstacle o = new Obstacle_Rectangle(LeftMouseDownPos, MousePos);
+            Obstacle o = new Obstacle_Rectangle(LeftMouseDownPos, MousePos, IsBuildingMirrors);
             o.Show(g,p);
         }
 

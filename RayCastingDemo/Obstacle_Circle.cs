@@ -9,13 +9,14 @@ namespace RayCastingDemo
 {
     class Obstacle_Circle: Obstacle
     {
-        public Point Center;
+        public PointF Center;
         public double Radius;
 
-        public Obstacle_Circle(Point Center_, double Radius_)
+        public Obstacle_Circle(PointF Center_, double Radius_, bool Reflective)
         {
             this.Center = Center_;
             this.Radius = Radius_;
+            this.Reflective = Reflective;
         }
 
         public override void Show(Graphics g_, Pen LinePen_)
@@ -23,7 +24,7 @@ namespace RayCastingDemo
             g_.DrawEllipse( LinePen_, Utility.BoundingRectangle(Center, Radius) );
         }
 
-        public override bool Touched(Point Pos_)
+        public override bool Touched(PointF Pos_)
         {
             bool Result = false;
 
@@ -33,12 +34,12 @@ namespace RayCastingDemo
             return Result;
         }
 
-        public override Point Cast(Ray Ray_)
+        public override PointF Cast(Ray Ray_)
         {
             // sync with my sketch :)
-            Point S = Ray_.Source;
-            Point E = Ray_.InfPoint();
-            Point O = this.Center;
+            PointF S = Ray_.Source;
+            PointF E = Ray_.InfPoint();
+            PointF O = this.Center;
             double r = this.Radius;
 
             // quadratic equation
@@ -51,23 +52,42 @@ namespace RayCastingDemo
                 return E;
 
             double t;
-            Point Result;
+            PointF Result;
 
             t = ( -b - Math.Sqrt(delta) ) / (2d*a);
             if( t>0 )
             {
-                Result = new Point( (int)(S.X + t*(E.X - S.X)), (int)(S.Y + t*(E.Y - S.Y)) );
+                Result = new PointF( (float)(S.X + t*(E.X - S.X)), (float)(S.Y + t*(E.Y - S.Y)) );
                 return Result;
             }
 
             t = ( -b + Math.Sqrt(delta) ) / (2d*a);
             if( t>0 )
             {
-                Result = new Point( (int)(S.X + t*(E.X - S.X)), (int)(S.Y + t*(E.Y - S.Y)) );
+                Result = new PointF( (float)(S.X + t*(E.X - S.X)), (float)(S.Y + t*(E.Y - S.Y)) );
                 return Result;
             }
 
             return Ray_.InfPoint();
         }
+
+        public override Ray ReflectedRay(Ray Ray_)
+        {
+            if(! Reflective )
+                return null;
+            if( Ray_.ReflectingEnergy == 0 )
+                return null;
+            
+            PointF Source = this.Cast(Ray_);
+            if( Source == Ray_.InfPoint() )
+                return null;
+
+            double Angle = 2*Utility.GetDir(Center, Source) + Math.PI - Ray_.Angle;
+            Source = Utility.MovePointOffset(Source, Angle);
+
+            Ray Result = new Ray(Source, Angle, Ray_.RayPen, Ray_.ReflectingEnergy - 1);
+            return Result;
+        }
+
     }
 }

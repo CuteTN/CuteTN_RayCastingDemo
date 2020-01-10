@@ -10,30 +10,31 @@ namespace RayCastingDemo
     public static class Utility
     {
         public const double oo = 100000;
+        public const double eps = 5;
 
         /// Euclidean norm of a vector
-        static public double VNorm(Point vector)
+        static public double VNorm(PointF vector)
         {
-            int x = vector.X;
-            int y = vector.Y;
+            double x = vector.X;
+            double y = vector.Y;
 
             return Math.Sqrt(x*x + y*y);
         }
 
-        /// Distance from point A to point B
-        static public double Distance(Point A, Point B)
+        /// Distance from PointF A to PointF B
+        static public double Distance(PointF A, PointF B)
         {
-            Point vector = new Point(B.X - A.X, B.Y - A.Y);
+            PointF vector = new PointF(B.X - A.X, B.Y - A.Y);
             return VNorm(vector);
         }
 
-        /// Distance from point A to line BC
-        static public double Distance(Point A, Point B, Point C)
+        /// Distance from PointF A to line BC
+        static public double Distance(PointF A, PointF B, PointF C)
         {
             return TriangleArea(A,B,C)/Distance(B,C);
         }
 
-        static public double TriangleArea(Point A, Point B, Point C)
+        static public double TriangleArea(PointF A, PointF B, PointF C)
         {
             double a = Distance(B, C);
             double b = Distance(A, C);
@@ -45,25 +46,25 @@ namespace RayCastingDemo
         }
 
         /// getting the bounding rectangle of a circle
-        static public Rectangle BoundingRectangle(Point Center, double Radius)
+        static public RectangleF BoundingRectangle(PointF Center, double Radius)
         {
-            Rectangle Result = new Rectangle();
+            RectangleF Result = new RectangleF();
             double SideLength = Radius*2;
 
-            Result.Location = new Point( (int)(Center.X - SideLength/2), (int)(Center.Y - SideLength/2) );
-            Result.Size = new Size( (int)SideLength, (int)SideLength );
+            Result.Location = new PointF( (float)(Center.X - SideLength/2), (float)(Center.Y - SideLength/2) );
+            Result.Size = new SizeF( (float)SideLength, (float)SideLength );
             return Result;
         }
 
         /// dot product of 2 vectors
-        static public double Dot(Point V1, Point V2)
+        static public double Dot(PointF V1, PointF V2)
         {
             return V1.X*V2.X + V1.Y*V2.Y;
         }
 
 
         /// Normalize a vector
-        static public PointF Normalize(Point V)
+        static public PointF Normalize(PointF V)
         {
             float d = (float)VNorm(V);
             PointF result = new PointF( V.X/d, V.Y/d );
@@ -74,6 +75,36 @@ namespace RayCastingDemo
         static public bool IsDark(Color color)
         {
             return (color.R + color.G + color.B <= 381);
+        }
+
+        /// Finding direction of a line
+        static public double GetDir(PointF A, PointF B)
+        {
+            try
+            {
+                double dy = A.Y - B.Y;
+                double dx = A.X - B.X;
+
+                // dy/dx == the slope of the line
+                double temp = Math.Atan( dy/dx );   
+                
+                if( double.IsNaN(temp) || double.IsInfinity(temp) )
+                    return Math.PI/2;
+                return temp;
+            }
+            catch
+            {
+                return Math.PI/2;
+            }
+        }
+
+        /// move the PointF a little bit...
+        static public PointF MovePointOffset(PointF origin, double dir)
+        {
+            PointF result = new PointF();
+            result.X = (float)( origin.X + eps*Math.Cos(dir) );
+            result.Y = (float)( origin.Y + eps*Math.Sin(dir) );
+            return result;
         }
     }
 }
