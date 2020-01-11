@@ -10,7 +10,7 @@ namespace RayCastingDemo
     public static class Utility
     {
         public const double oo = 100000;
-        public const double eps = 5;
+        public const double eps = 2;
 
         /// Euclidean norm of a vector
         static public double VNorm(PointF vector)

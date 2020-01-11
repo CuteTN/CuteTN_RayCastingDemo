@@ -101,6 +101,21 @@ namespace RayCastingDemo
             InitializeEvents();
         }
 
+        private void UserLog(string msg)
+        {
+            Graphics g = this.CreateGraphics();
+            Pen p = new Pen( Color.FromArgb(200, Color.White), 3);
+            Brush b = new SolidBrush( Color.FromArgb(100, Color.White ) );
+            Rectangle rect = new Rectangle(0, 0, this.Width, 30);
+
+            g.DrawRectangle(p, rect);
+            g.FillRectangle(b, rect);
+
+            Font font = new Font("Arial", 15);
+            b = new SolidBrush( Color.Black );
+            g.DrawString(msg, font, b, new PointF(0, 5) );
+        }
+
 
         // hotkeys handling ////////////////////////////////////////////////////////////////////////////////////////////////// 
         private void HotKeyHandle(Keys key)
@@ -150,6 +165,7 @@ namespace RayCastingDemo
                 case Keys.Back:
                 {
                     Obstacles.Clear();
+                    SpotLight.Update(Cursor.Position, Obstacles);
                     this.Refresh();
                     break;
                 }
@@ -285,13 +301,22 @@ namespace RayCastingDemo
                 buildType = value;
 
                 this.Refresh();
-                Font font = new Font("Arial", 12);
-                Brush brush = new SolidBrush( Utility.IsDark(this.BackColor)? Color.White:Color.Black );
-                this.CreateGraphics().DrawString("Building type has been changed to: " + buildType.ToString(), font, brush, new PointF(0,0) );
+                UserLog("Building type has changed to: " + buildType.ToString());
             }
         }
 
-        bool IsBuildingMirrors = false;
+        bool isBuildingMirrors = false;
+        bool IsBuildingMirrors
+        {
+            get { return isBuildingMirrors; }
+            set
+            {
+                isBuildingMirrors = value;
+
+                this.Refresh();
+                UserLog("Mirror material: " + (isBuildingMirrors? "ON":"OFF") );
+            }
+        }
 
         private void FormMain_MouseDown_Build(object sender, MouseEventArgs e)
         {
